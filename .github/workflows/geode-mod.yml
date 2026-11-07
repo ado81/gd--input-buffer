@@ -23,7 +23,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
-      - name: Build native Geode mod
+      - name: Test game-agnostic buffer core\n        run: |\n          c++ -std=c++17 -Wall -Wextra -Werror geode-mod/tests/input_buffer_core_test.cpp -o /tmp/gdib-core-test\n          /tmp/gdib-core-test\n\n      - name: Build native Geode mod
         id: build
         uses: geode-sdk/build-geode-mod@main
         with:
