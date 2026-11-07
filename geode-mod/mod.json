@@ -1,0 +1,11 @@
+{
+  "geode": "5.11.2",
+  "gd": {
+    "android": "2.2081"
+  },
+  "id": "ado81.gd-input-buffer",
+  "name": "GD Input Buffer",
+  "version": "0.1.0",
+  "developer": "ado81",
+  "description": "Native Geode diagnostic scaffold. Gameplay input buffering is not enabled yet."
+}
