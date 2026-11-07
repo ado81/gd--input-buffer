@@ -8,7 +8,7 @@ Workflow run [42386818780](https://github.com/ado81/gd--input-buffer/actions/run
 - Android32: build and artifact upload succeeded.
 - Android64: build and artifact upload succeeded.
 
-The generated `.geode` packages contain the corresponding native ELF shared library and `mod.json`. This verifies compilation and packaging only. It does **not** verify loading inside the user's game process or gameplay behavior.
+The generated `.geode` packages contain the corresponding native ELF shared library and `mod.json`. ELF inspection confirmed Android32 is ELF32/ARM and Android64 is ELF64/AArch64. This verifies compilation and packaging only. It does **not** verify loading inside the user's game process or gameplay behavior.
 
 ## Correct version mapping: Android 2.2.144 -> Geode 2.2081
 
@@ -57,7 +57,7 @@ A diagnostic-only native mod scaffold now exists in `geode-mod/`:
 
 This scaffold intentionally has **no gameplay hooks**, no input interception, no collision hooks, and no touch replay. GitHub Actions successfully compiled and packaged it for Android32 and Android64 in workflow run `42386818780`. These are valid Geode diagnostic packages, not a functional input-buffer mod.
 
-## Android ABI
+## Native buffer core and unit tests\n\nA game-agnostic C++ state machine now lives in `geode-mod/src/InputBufferCore.hpp`. It stores one pending tap, treats `Dangerous` and `Unknown` as unsafe, only returns `Executed` for an explicitly `Safe` frame, expires old requests, handles frame-counter regression, and supports cancellation. The standalone test file is `geode-mod/tests/input_buffer_core_test.cpp`. The core test was also compiled and run locally with `g++ -std=c++17 -Wall -Wextra -Werror` and passed.\n\nThis is only the deterministic state machine. It is not yet called by any Geode hook and does not read game frames, detect collisions, or replay taps.\n\n## Android ABI
 
 The official launcher Gradle configuration includes:
 - `arm64-v8a` (64-bit)
