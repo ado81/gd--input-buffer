@@ -1,0 +1,38 @@
+name: Build Geode Android mod
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "geode-mod/**"
+      - ".github/workflows/geode-mod.yml"
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - Android32
+          - Android64
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Build native Geode mod
+        id: build
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          path: geode-mod
+          target: ${{ matrix.target }}
+          sdk: given
+
+      - name: Upload Geode package
+        uses: actions/upload-artifact@v7
+        with:
+          name: GD-Input-Buffer-${{ matrix.target }}
+          path: ${{ steps.build.outputs.build-output }}
