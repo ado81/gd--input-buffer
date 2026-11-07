@@ -7,7 +7,7 @@ Proyecto de investigación para implementar un buffer de entrada nativo en Geome
 - [x] Scaffold nativo Geode creado.
 - [x] Compilación Android32 correcta.
 - [x] Compilación Android64 correcta.
-- [x] Paquetes `.geode` generados por GitHub Actions.
+- [x] Paquetes `.geode` generados por GitHub Actions.\n- [x] Núcleo nativo de buffer con política fail-closed (solo SAFE libera).\n- [x] Pruebas unitarias del núcleo (seguridad, expiración, reinicio de frame y cancelación).
 - [ ] Confirmar carga del mod dentro de Geometry Dash 2.2.144 / bindings 2.2081.
 - [ ] Verificar símbolos y firmas reales del binario Android de Geometry Dash para cada ABI.
 - [ ] Implementar hooks de entrada y ciclo de simulación.
