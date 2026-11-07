@@ -2,6 +2,14 @@
 
 Last checked: 2026-11-07
 
+## CI build verification
+
+Workflow run [42386818780](https://github.com/ado81/gd--input-buffer/actions/runs/42386818780) completed successfully for both matrix targets:
+- Android32: build and artifact upload succeeded.
+- Android64: build and artifact upload succeeded.
+
+The generated `.geode` packages contain the corresponding native ELF shared library and `mod.json`. This verifies compilation and packaging only. It does **not** verify loading inside the user's game process or gameplay behavior.
+
 ## Correct version mapping: Android 2.2.144 -> Geode 2.2081
 
 The official Geode Android launcher source currently declares:
@@ -47,7 +55,7 @@ A diagnostic-only native mod scaffold now exists in `geode-mod/`:
 - `mod.json` targets Android GD `2.2081` and Geode `5.11.2`.
 - `src/main.cpp` logs a message when the mod loads.
 
-This scaffold intentionally has **no gameplay hooks**, no input interception, no collision hooks, and no touch replay. It is not yet a verified build or installable mod package.
+This scaffold intentionally has **no gameplay hooks**, no input interception, no collision hooks, and no touch replay. GitHub Actions successfully compiled and packaged it for Android32 and Android64 in workflow run `42386818780`. These are valid Geode diagnostic packages, not a functional input-buffer mod.
 
 ## Android ABI
 
