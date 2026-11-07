@@ -8,9 +8,11 @@ import android.os.IBinder
 import android.os.Looper
 import android.view.Gravity
 import android.view.MotionEvent
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.Toast
+import kotlin.math.abs
 
 class OverlayService : Service() {
     private lateinit var windowManager: WindowManager
@@ -20,16 +22,22 @@ class OverlayService : Service() {
     override fun onCreate() {
         super.onCreate()
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
+
         val button = Button(this).apply {
             text = "GD TAP"
             setOnClickListener {
                 isEnabled = false
                 handler.postDelayed({
-                    Toast.makeText(this@OverlayService, "Entrada procesada (demo)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@OverlayService,
+                        "Entrada procesada (demo)",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     isEnabled = true
                 }, 100L)
             }
         }
+
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -41,38 +49,45 @@ class OverlayService : Service() {
             x = 40
             y = 180
         }
-        button.setOnTouchListener(object : android.view.View.OnTouchListener {
+
+        button.setOnTouchListener(object : View.OnTouchListener {
             private var downX = 0f
             private var downY = 0f
             private var startX = 0
             private var startY = 0
             private var dragging = false
 
-            override fun onTouch(v: android.view.View, event: MotionEvent): Boolean {
-                when (event.action) {
+            override fun onTouch(v: View, event: MotionEvent): Boolean {
+                when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN -> {
                         downX = event.rawX
                         downY = event.rawY
                         startX = params.x
                         startY = params.y
                         dragging = false
-                        return false
+                        return true
                     }
                     MotionEvent.ACTION_MOVE -> {
                         val dx = (event.rawX - downX).toInt()
                         val dy = (event.rawY - downY).toInt()
-                        if (kotlin.math.abs(dx) > 8 || kotlin.math.abs(dy) > 8) dragging = true
+                        if (abs(dx) > 8 || abs(dy) > 8) dragging = true
                         if (dragging) {
                             params.x = startX + dx
                             params.y = startY + dy
                             windowManager.updateViewLayout(button, params)
                         }
+                        return true
                     }
-                    MotionEvent.ACTION_UP -> if (dragging) return true
+                    MotionEvent.ACTION_UP -> {
+                        if (!dragging) v.performClick()
+                        return true
+                    }
+                    MotionEvent.ACTION_CANCEL -> return true
                 }
-                return dragging
+                return true
             }
         })
+
         windowManager.addView(button, params)
         overlayButton = button
     }
